@@ -8,15 +8,16 @@ local func_map = {
    -- 可以在这里继续添加更多的映射
 }
 
+-- 功能：
 local function call_function_by_name(func_name, ...)
-
    local func = func_map[func_name]
    if func then
-       return func(...)
+      return func(...)
    else
-       error("Function not found: " .. tostring(func_name))
+      error("Function not found: " .. tostring(func_name))
    end
 end
+
 
 -- 功能：从文件中读取JSON配置
 local function load(file_path)
@@ -29,8 +30,8 @@ local function load(file_path)
    file:close()
    local config, err = cjson.decode(content)
    if not config then
-       ngx.log(ngx.ERR, "Failed to decode config file: ", err)
-       return nil
+      ngx.log(ngx.ERR, "Failed to decode config file: ", err)
+      return nil
    end
    return config
 end
@@ -58,17 +59,17 @@ end
 
 local function apply_rules(src, dest, rules)
    for _, rule in ipairs(rules) do
-       local src_value = rule.spath and access_json_by_path(src, rule.spath) or nil
-       local dest_path = rule.dpath
+      local src_value = rule.spath and access_json_by_path(src, rule.spath) or nil
+      local dest_path = rule.dpath
 
-       -- 如果指定了操作函数，则调用该函数处理源值
-       if rule.op and type(rule.op) == "table" and rule.op[1] then
-           local func_name = table.remove(rule.op, 1)
-           src_value = call_function_by_name(func_name, src_value, table.unpack(rule.op))
-       end
+      -- 如果指定了操作函数，则调用该函数处理源值
+      if rule.op and type(rule.op) == "table" and rule.op[1] then
+	 local func_name = table.remove(rule.op, 1)
+	 src_value = call_function_by_name(func_name, src_value, table.unpack(rule.op))
+      end
 
-       -- 将处理后的值设置到目标路径
-       access_json_by_path(dest, dest_path, src_value)
+      -- 将处理后的值设置到目标路径
+      access_json_by_path(dest, dest_path, src_value)
    end
 end
 
@@ -82,8 +83,8 @@ local function transform(json_str, config_path)
    local rules = config.rules
 
    if src_data and rules then
-       apply_rules(src_data, dest_data, rules)
-       return cjson.encode(dest_data)
+      apply_rules(src_data, dest_data, rules)
+      return cjson.encode(dest_data)
    end
 
    return json_str
