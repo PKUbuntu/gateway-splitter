@@ -1,0 +1,22 @@
+{
+    "rules": [
+      {
+        "spath": "param_4.inner_param_1",
+        "dpath": "inner_param_1"
+      },
+      {
+        "spath": "param_1",
+        "dpath": "param_1_modified",
+        "op": ["add_suffix"]
+      },
+      {
+        "spath": "param_3",
+        "dpath": "param_3"
+      },
+      {
+        "spath": "",
+        "dpath": "id",
+        "op": ["generate_id"]
+      }
+    ]
+}
