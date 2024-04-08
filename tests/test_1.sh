@@ -1,12 +1,12 @@
 #!/bin/bash
 
-curl -X POST http://localhost:8080/transform \
+curl -X POST http://localhost:8080/transform?config=transform_1.json \
      -H "Content-Type: application/json" \
      -d '{ 
-     	   "param_1": "value1", 
-	   "param_2": 2, 
-	   "param_3": [1, 2, 3], 
-	   "param_4": {
+			"param_1": "value1", 
+			"param_2": 2, 
+			"param_3": [1, 2, 3], 
+			"param_4": {
 	   	      "inner_param_1": "inner_1"
            }
 	}'
