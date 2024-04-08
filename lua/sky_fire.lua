@@ -37,22 +37,24 @@ local function load(file_path)
 end
 
 -- 功能：根据路径获取或设置JSON对象的值
+-- 辅助函数：根据路径获取或设置嵌套的JSON值
 local function access_json_by_path(obj, path, value)
    local parts = {}
    for part in string.gmatch(path, "[^%.]+") do
-      table.insert(parts, part)
+       table.insert(parts, part)
    end
-
+   
+   local current = obj
    for i = 1, #parts - 1 do
-      obj = obj[parts[i]]
-      if not obj then return nil end
+       local part = parts[i]
+       current[part] = current[part] or {}
+       current = current[part]
    end
-
-   local lastPart = parts[#parts]
-   if value then
-      obj[lastPart] = value
+   
+   if value ~= nil then
+       current[parts[#parts]] = value
    else
-      return obj[lastPart]
+       return current[parts[#parts]]
    end
 end
 
@@ -64,8 +66,8 @@ local function apply_rules(src, dest, rules)
 
       -- 如果指定了操作函数，则调用该函数处理源值
       if rule.op and type(rule.op) == "table" and rule.op[1] then
-	 local func_name = table.remove(rule.op, 1)
-	 src_value = call_function_by_name(func_name, src_value, table.unpack(rule.op))
+	      local func_name = table.remove(rule.op, 1)
+	      src_value = call_function_by_name(func_name, src_value, table.unpack(rule.op))
       end
 
       -- 将处理后的值设置到目标路径
