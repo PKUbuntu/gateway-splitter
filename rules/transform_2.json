@@ -2,7 +2,7 @@
     "rules": [
       {
         "spath": "param_4.inner_param_1",
-        "dpath": "param_4.inner.inner_param_1",
+        "dpath": "inner_param_1",
         "op": ["add_prefix"]
       },
       {
@@ -16,8 +16,12 @@
       },
       {
         "spath": "",
-        "dpath": "a.b.c.e.id",
+        "dpath": "id",
         "op": ["generate_id"]
+      },
+      {
+        "spath": "recipe_body",
+        "dpath": "recipe_body"
       }
     ]
 }

@@ -4,6 +4,7 @@ local external_func = require "op_func"
 
 local func_map = {
    add_suffix = external_func.add_suffix,
+   add_prefix = external_func.add_prefix,
    generate_id = external_func.generate_id,
    -- 可以在这里继续添加更多的映射
 }
@@ -26,6 +27,7 @@ local function load(file_path)
       ngx.log(ngx.ERR, "Failed to open config file: ", file_path)
       return nil
    end
+   ngx.log(ngx.INFO, "Open config file: ", file_path)
    local content = file:read("*a")
    file:close()
    local config, err = cjson.decode(content)
