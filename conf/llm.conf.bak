@@ -1,0 +1,26 @@
+# 配置和 llm 相关的内容：
+# 1. ollama 的多 upstream -> 6060
+# 2. 使用 nginx_upstream_check_module 来检测可用性
+
+upstream ollama {
+  # server 192.168.70.185:11434;
+  server localhost:11434;
+  # check interval=3000 rise=2 fall=5 timeout=2000 type=http;
+  ## 需要重新编译，且 mac 下没有 brew 可安装包，暂时 HOLD 
+}
+
+server {
+  listen [::]:6060;
+  listen 6060;
+  
+  # The host name to respond to
+  server_name _;
+
+  location / {
+        proxy_pass http://ollama;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}
